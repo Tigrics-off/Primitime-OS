@@ -15,7 +15,7 @@ void set_timezone(int new)
     time_zone = new;
 }
 
-int get_tinezone()
+int get_timezone()
 {
     return time_zone;
 }

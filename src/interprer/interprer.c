@@ -88,13 +88,13 @@ void tz(char *cmd)
         set_timezone(atoi(&cmd[6]));
 
         char str[255];
-        sprintf_(str, "New time zone: %d", get_tinezone());
+        sprintf_(str, "New timezone: %d", get_timezone());
         print(str, 0, 0x0a);
     }
     else
     {
         char str[255];
-        sprintf_(str, "Current time zone: %d", get_tinezone());
+        sprintf_(str, "Current timezone: %d", get_timezone());
         print(str, 0, 0x0a);
     }
     
@@ -110,7 +110,8 @@ void help()
         "dlt [file] - delete file",
         "list - show files",
         "time - time for current timezone",
-        "tzone - set timezone",
+        "tzone [zone] - set timezone",
+        "tzone - get current timezone"
         "te - text editor",
         "- te [file] [name] - modify file",
         "- te [file] - show file data",
