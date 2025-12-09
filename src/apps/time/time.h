@@ -3,7 +3,10 @@
 
 #include <stdint.h>
 
+void set_timezone(int new);
+int get_tinezone();
+
 void init_rtc();
-uint8_t get_time(int phase);
+int get_time(int *h, int *m, int *s);
 
 #endif

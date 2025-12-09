@@ -6,10 +6,7 @@
 #include "apps/time/time.h"
 #include "base/base.h"
 
-#define null ((void *)0)
-
-int mode = 0;
-int game_timer = 0;
+#define null (void *)0
 
 void list_files()
 {
@@ -74,6 +71,34 @@ void te(char name[])
         copy_str(text, fs.files[is_found].data);
     replace("File updated succesful", 2, 0x0a);
 }
+void time()
+{
+    char str[100];
+
+    int h, m, s;
+    get_time(&h, &m, &s);
+
+    sprintf_(str, "%d:%d:%d", h, m, s);
+    print(str, 0, 0x0a);
+}
+void tz(char *cmd)
+{
+    if (cmd[5] == ' ' && cmd[6] != '\0')
+    {
+        set_timezone(atoi(&cmd[6]));
+
+        char str[255];
+        sprintf_(str, "New time zone: %d", get_tinezone());
+        print(str, 0, 0x0a);
+    }
+    else
+    {
+        char str[255];
+        sprintf_(str, "Current time zone: %d", get_tinezone());
+        print(str, 0, 0x0a);
+    }
+    
+}
 void help()
 {
     char commands[][100] = {
@@ -84,8 +109,9 @@ void help()
         "make [file] - create file",
         "dlt [file] - delete file",
         "list - show files",
+        "time - time for current timezone",
+        "tzone - set timezone",
         "te - text editor",
-        "time - stopwatch from start system",
         "- te [file] [name] - modify file",
         "- te [file] - show file data",
         "shutdown - shutdown system",
@@ -100,84 +126,59 @@ void help()
 }
 void exec(char cmd[])
 {
-    for (int i = 1; i < 8; i++)
+    clear();
+
+    if (strncmp(cmd, "write", 5) == 0)
     {
-        clear_str(i);
+        replace(&cmd[5], 3, 0x0a);
     }
-    if (mode == 0)
+    else if (strcmp(cmd, "list") == 0)
+    {
+        list_files();
+    }
+    else if (strncmp(cmd, "make ", 5) == 0)
+    {
+        make(&cmd[5]);
+    }
+    else if (strncmp(cmd, "dlt ", 4) == 0)
+    {
+        char *name = &cmd[4];
+        delete_file(name);
+    }
+    else if (strncmp(cmd, "te ", 3) == 0)
+    {
+        te(&cmd[3]);
+    }
+    else if (strcmp(cmd, "shutdown") == 0)
+    {
+        shutdown();
+    }
+    else if (strcmp(cmd, "reload") == 0)
+    {
+        reboot();
+    }
+    else if (strcmp(cmd, "time") == 0)
+    {
+        time();
+    }
+    else if (strncmp(cmd, "tzone", 5) == 0)
+    {
+        tz(cmd);
+    }
+    else if (strcmp(cmd, "hello") == 0)
+    {
+        replace("Hello. Welcome to PrimitiveOS by Tigrics.", 1, 0x0a);
+    }
+    else if (strcmp(cmd, "help") == 0)
+    {
+        help();
+    }
+    else if (strcmp(cmd, "clear") == 0)
     {
         clear();
-        if (strncmp(cmd, "write", 5) == 0)
-        {
-            replace(&cmd[5], 3, 0x0a);
-        }
-        else if (strcmp(cmd, "racer") == 0)
-        {
-            init_racer();
-            mode = 1;
-        }
-        else if (strcmp(cmd, "list") == 0)
-        {
-            list_files();
-        }
-        else if (strncmp(cmd, "make ", 5) == 0)
-        {
-            make(&cmd[5]);
-        }
-        else if (strncmp(cmd, "dlt ", 4) == 0)
-        {
-            char *name = &cmd[4];
-            delete_file(name);
-        }
-        else if (strncmp(cmd, "te ", 3) == 0)
-        {
-            te(&cmd[3]);
-        }
-        else if (strcmp(cmd, "shutdown") == 0)
-        {
-            shutdown();
-        }
-        else if (strcmp(cmd, "reload") == 0)
-        {
-            reboot();
-        }
-        else if (strcmp(cmd, "time") == 0)
-        {
-            char str[100];
-            sprintf_(str, "Seconds: %d", get_time(0));
-            print(str, 0, 0x0a);
-        }
-        else if (strcmp(cmd, "hello") == 0)
-        {
-            replace("Hello. Welcome to PrimitiveOS by Tigrics.", 1, 0x0a);
-        }
-        else if (strcmp(cmd, "help") == 0)
-        {
-            help();
-        }
-        else if (strcmp(cmd, "clear") == 0)
-        {
-            clear();
-        }
-        else
-        {
-            replace("command not found", 1, 0x0a);
-        }
     }
     else
     {
-        if (strcmp(cmd, "a") == 0)
-        {
-            move_car_left();
-        }
-        else if (strcmp(cmd, "d") == 0)
-        {
-            move_car_right();
-        }
-        else if (strcmp(cmd, "q") == 0)
-        {
-            mode = 0;
-            replace("Exit...", 0, 0x0a);
-        }
+        replace("Command not found", 1, 0x0a);
     }
 }

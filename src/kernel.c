@@ -11,7 +11,6 @@ void kmain()
     clear();
     print("OS Started. Write help for commands", 0, 0x0a);
     
-    
     int str = 24;
     int str_handler = str;
 

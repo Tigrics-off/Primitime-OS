@@ -19,5 +19,3 @@ i686-elf-ld -T src\linker.ld -o build\kernel.elf $object
 i686-elf-objcopy -O binary build\kernel.elf build\kernel.bin
 
 qemu-system-i386 -kernel build\kernel.elf
-
-cls

@@ -1,5 +1,25 @@
 #define null ((void*)0)
 
+int atoi(char *s)
+{
+    int acum = 0;
+    int factor = 1;
+    
+    if(*s == '-')
+    {
+        factor = -1;
+        s++;
+    }
+    
+    while((*s >= '0')&&(*s <= '9'))
+    {
+        acum = acum * 10;
+        acum = acum + (*s - 48);
+        s++;
+    }
+    return (factor * acum);
+}
+
 int strcmp(const char *s1, const char *s2) 
 {
     while (*s1 && *s2 && *s1 == *s2) 
@@ -28,7 +48,6 @@ char *strchr(const char *str, int ch)
     }
     return null;
 }
-
 char *strcpy(char *dest, const char *src)
 {
     char *d = dest;
