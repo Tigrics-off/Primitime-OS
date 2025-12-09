@@ -32,6 +32,8 @@
 * make - Create file
 * dlt - Delete file
 * list - Show files
+* time - Get time
+* tzone - Set timezone for ```time``` command
 * te - Text editor
 * shutdown - Power off
 * reload - Reboot
