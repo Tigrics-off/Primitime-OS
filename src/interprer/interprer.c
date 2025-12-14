@@ -99,6 +99,25 @@ void tz(char *cmd)
     }
     
 }
+void rng(char *cmd)
+{
+    char str[255];
+    int min = atoi(&cmd[6]);
+    int max = atoi(strchr(cmd, ' ') + 1);
+
+    if (max < min)
+    {
+        print("Maximum should be bigger than minimum", 0, 0x0a);
+        return;
+    }
+    
+    int trash;
+    srand(trash);
+
+    int result = min + rand() % (max - min + 1);
+    sprintf_(str, "Random number from %d to %d: %d", min, max, result);
+    print(str, 0, 0x0a);
+}
 void help()
 {
     char commands[][100] = {
@@ -109,9 +128,10 @@ void help()
         "make [file] - create file",
         "dlt [file] - delete file",
         "list - show files",
+        "rand [mix] [max] - random number generator",
         "time - time for current timezone",
         "tzone [zone] - set timezone",
-        "tzone - get current timezone"
+        "tzone - get current timezone",
         "te - text editor",
         "- te [file] [name] - modify file",
         "- te [file] - show file data",
@@ -143,7 +163,7 @@ void exec(char cmd[])
     }
     else if (strncmp(cmd, "dlt ", 4) == 0)
     {
-        char *name = &cmd[4];
+        char name[] = &cmd[4];
         delete_file(name);
     }
     else if (strncmp(cmd, "te ", 3) == 0)
@@ -165,6 +185,10 @@ void exec(char cmd[])
     else if (strncmp(cmd, "tzone", 5) == 0)
     {
         tz(cmd);
+    }
+    else if (strncmp(cmd, "rand ", 5) == 0)
+    {
+        rng(cmd);
     }
     else if (strcmp(cmd, "hello") == 0)
     {
